@@ -1,0 +1,38 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Вход на сайт{% endblock %}
+
+{% block content %}
+
+{% include 'restaurant/header.html' %}
+
+<div class="container mt-5">
+    <div class="row text-start">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Войти в личный кабинет</h4>
+                </div>
+                <div class="card-body">
+                    <form method="post" enctype="multipart/form-data" class="form-floating">
+                        <div class="mb-3">
+                          {% csrf_token %}
+                          <label for="exampleFormControlInput1" class="form-label">Email:</label>
+                          <input type="email" class="form-control" id="exampleFormControlInput1" name="username" placeholder="name@example.com">
+                          <label for="inputPassword5" class="form-label">Пароль:</label>
+                          <input type="password" id="inputPassword5" class="form-control" name="password" aria-describedby="passwordHelpBlock" placeholder="Введите пароль">
+                        </div>
+                        <button type="submit" class="btn btn-lg btn-block btn-outline-black mt-3">
+                            Войти
+                        </button>
+                        <a type="button" class="btn btn-lg btn-block btn-outline-black mt-3" href="{% url 'restaurant:home'%}" >Отмена</a>
+                        <a class="link-dark d-md-flex justify-content-md-end" href="{% url 'users:change_password' %}">
+                      Восстановить пароль
+                    </a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
