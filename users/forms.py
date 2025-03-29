@@ -3,7 +3,7 @@ from django.contrib.auth.forms import UserCreationForm
 
 from rest_framework.exceptions import ValidationError
 
-from users.models import CustomUser
+from users.models import CustomUser, StyleFormsMixin
 
 
 class RegisterUserCreationForm(forms.ModelForm):
@@ -91,10 +91,22 @@ class CustomUserForm(forms.ModelForm):
         )
 
 
-class UserRegisterForm(UserCreationForm):
+class UserRegisterForm(StyleFormsMixin, forms.ModelForm):
     class Meta:
         model = CustomUser
-        fields = "__all__"
+        fields = (
+            "email",
+            "username",
+            "avatar",
+            "first_name",
+            "phone_number",
+            "password1",
+            "password2",
+            "country",
+        )
+
+    password1 = forms.CharField(widget=forms.PasswordInput)
+    password2 = forms.CharField(widget=forms.PasswordInput)
 
     def __init__(self, *args, **kwargs):
 
@@ -102,6 +114,7 @@ class UserRegisterForm(UserCreationForm):
 
         self.fields["password1"].widget.attrs.update(
             {
+                "class": "form-control",
                 "placeholder": "Придумайте пароль",
             }
         )
@@ -193,3 +206,8 @@ class PasswordUpdateForm(forms.ModelForm):
                 "placeholder": "Введите адрес электронной почты",
             }
         )
+
+
+class LoginForm(forms.Form):
+    username = forms.CharField()
+    password = forms.CharField(widget=forms.PasswordInput)
