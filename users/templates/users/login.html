@@ -14,7 +14,7 @@
                     <h4 class="my-0 font-weight-normal">Войти в личный кабинет</h4>
                 </div>
                 <div class="card-body">
-                    <form method="post" enctype="multipart/form-data" class="form-floating">
+                    <form method="post" enctype="multipart/form-data" class="form-floating" action="{% url 'users:login' %}">
                         <div class="mb-3">
                           {% csrf_token %}
                           <label for="exampleFormControlInput1" class="form-label">Email:</label>

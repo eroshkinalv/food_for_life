@@ -260,7 +260,7 @@ class ContactsView(View):
     @staticmethod
     def post(request):
         name = request.POST.get("name")
-        massage = request.POST.get("massage")
+        # massage = request.POST.get("massage") #добавить при необходимости
         return HttpResponse(f"Спасибо, {name}. Сообщение получено.")
 
 

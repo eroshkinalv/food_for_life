@@ -54,7 +54,7 @@ class ConfirmEmailView(View):
 
     def get(self, request, user_email):
         user = get_object_or_404(CustomUser, email=user_email)
-        activation_link = f"http://127.0.0.1:8000/users/login/"
+        # activation_link = f"http://127.0.0.1:8000/users/login/"
         if user.is_active:
             return HttpResponse("Ваш адрес электронной почты уже подтвержден!")
 
