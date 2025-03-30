@@ -1,0 +1,74 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Главная страница{% endblock %}
+
+{% block content %}
+
+{% include 'restaurant/header.html' %}
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="card-title pricing-card-title text-start">{{ user.email }}</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mt-3 mb-4 text-start m-3">
+                        <li><img src="{{ user.avatar }}"></li>
+                        <li>Имя пользователя: {{ user.username }}</li>
+                        <li>Телефон: {{ user.phone_number }} </li>
+                        <li>Страна: {{ user.country }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+
+                <div class="card-header">
+                    <h4 class="card-title pricing-card-title text-start">Бронирование</h4>
+                </div>
+
+
+
+                <div class="container mt-5">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Время</th>
+                                    <th>Количество гостей</th>
+                                    <th>Статус</th>
+                                    <th>Отмена</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for reservation in reservations %}
+                                {% if user == reservation.owner %}
+                                    <tr>
+                                        <td>{{ reservation.date }}</td>
+                                        <td>{{ reservation.time }}</td>
+                                        <td>{{ reservation.guests }}</td>
+                                        <td>{{ reservation.status }}</td>
+                                        <td>
+                                            <a href="{% url 'restaurant:reservation_delete' reservation.id %}"
+                                               class="btn btn-dark btn-sm">Отменить бронирование</a>
+                                        </td>
+                                    </tr>
+                                {% endif %}
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+
+{% endblock %}
