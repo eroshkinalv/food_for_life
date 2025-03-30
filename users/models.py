@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.forms import BooleanField
 
 
 class CustomUser(AbstractUser):
@@ -44,3 +45,12 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.email
+
+
+class StyleFormsMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, BooleanField):
+                field.widget.attrs['class'] = 'form-label'
+            field.widget.attrs['class'] = 'form-control'
