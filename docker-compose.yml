@@ -1,0 +1,77 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:latest
+    restart: on-failure
+    expose:
+      - "6379"
+
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+    expose:
+      - "5432"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123zaq
+    restart: always
+
+  web:
+    build: .
+    command: sh -c "python manage.py migrate && python manage.py collectstatic --noinput && gunicorn config.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - app_code:/app
+      - static_volume:/app/staticfiles
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    env_file:
+      - ./.env
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "8001:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - static_volume:/app/staticfiles
+    depends_on:
+      - web
+
+  django:
+    build: .
+    container_name: django
+    command: python manage.py runserver 127.0.0.1:8002
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8002:8002"
+    depends_on:
+      - db
+    environment:
+      DJANGO_SECRET_KEY: ${SECRET_KEY}
+      DEBUG: ${DEBUG}
+
+      DATABASE_NAME: ${POSTGRES_DB}
+      DATABASE_USERNAME: ${POSTGRES_USER}
+      DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
+      DATABASE_HOST: ${HOST}
+      DATABASE_PORT: ${PORT}
+
+    env_file:
+        - .env
+
+volumes:
+  postgres_data:
+  static_volume:
+  app_code:
