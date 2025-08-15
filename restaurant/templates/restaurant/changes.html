@@ -1,0 +1,49 @@
+{% extends 'restaurant/base.html' %}
+
+{% block title %}Редактор сайта{% endblock %}
+
+{% block content %}
+
+{% include 'restaurant/header.html' %}
+
+<div class="container mt-5">
+    <div class="row text-start">
+        <div class="col">
+            <div class="card mb-4 box-shadow">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Внести изменения на сайте</h4>
+                </div>
+                  <ul class="list-group">
+                    {% if restaurant %}
+                      {% for r in restaurant %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:restaurant_update' r.pk %}">Вид</button></a></li>
+                      {% endfor %}
+                    {% else %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:restaurant_create' %}">Вид</button></a></li>
+                    {% endif %}
+                    {% if tables %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:tables_list' %}">Столики</button></a></li>
+                    {% else %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:tables_create' %}">Столики</button></a></li>
+                    {% endif %}
+                    {% if service_choice %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:service_list' %}">Услуги</button></a></li>
+                    {% else %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:service_create' %}">Услуги</button></a></li>
+                    {% endif %}
+                    {% if employees %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:employees_list' %}">Персонал</button></a></li>
+                    {% else %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:employees_create' %}">Персонал</button></a></li>
+                    {% endif %}
+                    {% if menu %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:menu_list' %}">Меню</button></a></li>
+                    {% else %}
+                    <li class="list-group-item"><a class="p-2 btn btn-outline-dark" href="{% url 'restaurant:menu_create' %}">Меню</button></a></li>
+                    {% endif %}
+                  </ul>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

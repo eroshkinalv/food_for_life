@@ -1,0 +1,56 @@
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.forms import BooleanField
+
+
+class CustomUser(AbstractUser):
+    username = models.CharField(max_length=50, verbose_name="username", help_text="Введите имя пользователя")
+    email = models.EmailField(unique=True, verbose_name="Email", help_text="Введите свой email")
+    phone_number = models.CharField(
+        max_length=15,
+        verbose_name="Телефон",
+        blank=True,
+        null=True,
+        help_text="Введите номер телефона",
+    )
+    avatar = models.ImageField(
+        upload_to="profile_img/",
+        blank=True,
+        null=True,
+        verbose_name="Аватар",
+        help_text="Загрузите аватар",
+    )
+    country = models.CharField(
+        max_length=50,
+        blank=True,
+        null=True,
+        verbose_name="Страна",
+        help_text="Укажите страну",
+    )
+    is_blocked = models.BooleanField(default=False)
+
+    token = models.CharField(max_length=100, verbose_name="Токен", null=True, blank=True)
+
+    USERNAME_FIELD = "email"
+    REQUIRED_FIELDS = []
+
+    class Meta:
+        verbose_name = "Пользователь"
+        verbose_name_plural = "Пользователи"
+        ordering = ["email"]
+        permissions = [
+            ("can_manage_users", "can manage users"),
+            ("can_block_users", "can block users"),
+        ]
+
+    def __str__(self):
+        return self.email
+
+
+class StyleFormsMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            if isinstance(field, BooleanField):
+                field.widget.attrs['class'] = 'form-label'
+            field.widget.attrs['class'] = 'form-control'
